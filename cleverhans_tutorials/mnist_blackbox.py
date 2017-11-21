@@ -193,6 +193,12 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
     # Create TF session
     sess = tf.Session()
 
+    # Merge all the summaries and write them out to /tmp/mnist_logs (by default)
+    merged = tf.summary.merge_all()
+    train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/train',
+                                         sess.graph)
+    # test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/test')
+
     # Get MNIST data
     X_train, Y_train, X_test, Y_test = data_mnist(train_start=train_start,
                                                   train_end=train_end,
@@ -231,7 +237,8 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
     # Evaluate the substitute model on clean test examples
     eval_params = {'batch_size': batch_size}
-    acc = model_eval(sess, x, y, preds_sub, X_test, Y_test, args=eval_params)
+    summary, acc = model_eval(sess, x, y, preds_sub, X_test, Y_test, args=eval_params)
+    train_writer.add_summary(summary)
     accuracies['sub'] = acc
 
     # Initialize the Fast Gradient Sign Method (FGSM) attack object.
