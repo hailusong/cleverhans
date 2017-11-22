@@ -250,7 +250,7 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
     # Evaluate the accuracy of the "black-box" model on adversarial examples
     accuracy = model_eval(sess, x, y, model(x_adv_sub), X_test, Y_test,
-                          args=eval_params, summary_writter=train_writer)
+                          args=eval_params, summary_writter=train_writer, merge=merged)
     print('Test accuracy of oracle on adversarial examples generated '
           'using the substitute: ' + str(accuracy))
     accuracies['bbox_on_sub_adv_ex'] = accuracy
