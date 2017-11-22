@@ -237,8 +237,7 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
     # Evaluate the substitute model on clean test examples
     eval_params = {'batch_size': batch_size}
-    summary, acc = model_eval(sess, x, y, preds_sub, X_test, Y_test, args=eval_params)
-    train_writer.add_summary(summary)
+    acc = model_eval(sess, x, y, preds_sub, X_test, Y_test, args=eval_params)
     accuracies['sub'] = acc
 
     # Initialize the Fast Gradient Sign Method (FGSM) attack object.
@@ -251,7 +250,7 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
     # Evaluate the accuracy of the "black-box" model on adversarial examples
     accuracy = model_eval(sess, x, y, model(x_adv_sub), X_test, Y_test,
-                          args=eval_params)
+                          args=eval_params, summary_writter=train_writer)
     print('Test accuracy of oracle on adversarial examples generated '
           'using the substitute: ' + str(accuracy))
     accuracies['bbox_on_sub_adv_ex'] = accuracy
@@ -281,5 +280,6 @@ if __name__ == '__main__':
     flags.DEFINE_integer('data_aug', 6, 'Nb of substitute data augmentations')
     flags.DEFINE_integer('nb_epochs_s', 10, 'Training epochs for substitute')
     flags.DEFINE_float('lmbda', 0.1, 'Lambda from arxiv.org/abs/1602.02697')
+    flags.DEFINE_string('summaries_dir', '/tmp/summaries', 'summaries dir')
 
     tf.app.run()

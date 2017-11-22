@@ -179,7 +179,7 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
 
 
 def model_eval(sess, x, y, predictions=None, X_test=None, Y_test=None,
-               feed=None, args=None, model=None):
+               feed=None, args=None, model=None, summary_writter=None, ):
     """
     Compute the accuracy of a TF model on some data
     :param sess: TF session to use when training the graph
@@ -250,7 +250,9 @@ def model_eval(sess, x, y, predictions=None, X_test=None, Y_test=None,
             feed_dict = {x: X_test[start:end], y: Y_test[start:end]}
             if feed is not None:
                 feed_dict.update(feed)
-            cur_acc = acc_value.eval(feed_dict=feed_dict)
+            summary, cur_acc = acc_value.eval(feed_dict=feed_dict)
+            if summary_writter is not None:
+                summary_writter.add_summary(summary, batch)
 
             accuracy += (cur_batch_size * cur_acc)
 
