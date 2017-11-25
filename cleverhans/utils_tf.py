@@ -178,7 +178,7 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
     return True
 
 
-def model_eval(sess, x, y, predictions=None, merge=None, X_test=None, Y_test=None,
+def model_eval(sess, x, y, predictions=None, X_test=None, Y_test=None,
                feed=None, args=None, model=None):
     """
     Compute the accuracy of a TF model on some data
