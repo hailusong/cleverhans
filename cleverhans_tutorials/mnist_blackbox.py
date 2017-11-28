@@ -233,6 +233,7 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
     eval_params = {'batch_size': batch_size}
     acc = model_eval(sess, x, y, preds_sub, X_test, Y_test, args=eval_params)
     accuracies['sub'] = acc
+    print('Test accuracy of the substitute using test: ' + str(acc))
 
     # Initialize the Fast Gradient Sign Method (FGSM) attack object.
     fgsm_par = {'eps': 0.3, 'ord': np.inf, 'clip_min': 0., 'clip_max': 1.}
